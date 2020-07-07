@@ -10,6 +10,27 @@ const routes = [
     name: 'Home',
     component: Home
   },
+        {
+    path: '/create',
+    name: 'create',
+    component: () => import('../views/create.vue')
+  },
+    {
+    path: '/info',
+    name: 'info',
+    component: () => import('../views/info.vue')
+  },
+  // {
+  //   path: '/header',
+  //   name: 'header',
+  //   component: () => import('../views/header.vue')
+  // },
+  // {
+  //   path: '/banner',
+  //   name: 'Banner',
+  //   component: () => import('../views/Banner.vue')
+  // },
+
   {
     path: '/about',
     name: 'About',
