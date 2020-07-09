@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+
     <Header style="height: 100px" />
     <div  style="width:1080px; margin:0 auto">
       <Banner :banners="banners"/>
