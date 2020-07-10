@@ -10,6 +10,11 @@ const routes = [
     name: 'Home',
     component: Home
   },
+      {
+    path: '/jenkins',
+    name: 'jenkins_info',
+    component: () => import('../views/jenkins_info.vue')
+  },
         {
     path: '/create',
     name: 'create',

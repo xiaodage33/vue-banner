@@ -12,9 +12,9 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
-import Header from './header.vue'
-import Banner from './Banner.vue'
-import Footer from './Footer.vue'
+import Header from '../src/views/header.vue'
+import Banner from '../src/views/Banner.vue'
+import Footer from '../src/views/Footer.vue'
 
 export default {
   name: 'Home',
@@ -27,15 +27,15 @@ export default {
     return{
       banners:[
         {
-          url: require("../assets/img/banner1.png"),
+          url: require("../src/assets/img/banner1.png"),
           link: ''
         },
         {
-          url: require("../assets/img/banner2.png"),
+          url: require("../src/assets/img/banner2.png"),
           link: ''
         },
         {
-          url: require("../assets/img/banner3.png"),
+          url: require("../src/assets/img/banner3.png"),
           link: ''
         }
       ],

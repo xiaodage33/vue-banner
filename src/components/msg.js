@@ -13,6 +13,6 @@ export default new Vue
 //   <!--}-->
 // <!--</script>-->
 //
-// <!--<style scoped>-->
+// <!--<styles scoped>-->
 //
-// <!--</style>-->
+// <!--</styles>-->
