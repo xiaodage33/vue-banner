@@ -15,6 +15,13 @@ export function get_JenkinsOne(data){
         data,
     })
 }
+export function get_JenkinsOneHistory(data){
+    return service.request({
+        method:"get",
+        url:"/__api__/jks/jkshis",
+        data,
+    })
+}
 // //添加一条数据
 // export function addinfo(data){
 //     return service.request({

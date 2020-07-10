@@ -13,7 +13,7 @@
                :pod_name="data.pod_name"
                :before-close="handleDialogClose">
       <div >
-        <el-button class="pull-right" type="primary" @click="log_flush" v-loading="loading" style="font-size: 5px;" size="mini">历史打包查看
+        <el-button class="pull-right" type="primary" @click="get_Jks_history" v-loading="loading" style="font-size: 5px;" size="mini">历史打包查看
         </el-button>
       </div>
       <div style="width: 460px;height: 60px; background-color: white;font-size: 16px" class="margin-box" v-model="data.jenkinsone">
@@ -24,6 +24,8 @@
       <div>
       </div>
     </el-dialog>
+
+     <!--//////////////-->
 
 
 
@@ -36,6 +38,7 @@
 <script>
     import { reactive, ref, watch,toRefs} from '@vue/composition-api';
     import {get_JenkinsOne} from  '../../api/getinfo.js'
+    import  {get_JenkinsOneHistory } from  '../../api/getinfo.js'
     export default {
         name: "Dilog_ShowLog_one",
         props: {
@@ -59,7 +62,8 @@
             currentException:"",   //跳转当前的位置
             options:[],
             sel_id:'',
-          jenkinsone:{}
+          jenkinsone:{},
+          jenkinshistory:[]
         })
         const dialogVisible = ref(false)
         const quanping = ref(false)    //全屏默认true
@@ -95,11 +99,21 @@
             console.log("收到",data.jenkinsone)
           })
     }
+    const get_Jks_history=()=>{
+
+          get_JenkinsOneHistory().then(response=>{
+            data.jenkinshistory = response.data.data
+            console.log("data.jenkinshistory",data.jenkinshistory.sort())
+
+          })
+    }
+
+
 
 
 
         return {
-     data,openDialog,dialog_show_detail,handleDialogClose
+     data,openDialog,dialog_show_detail,handleDialogClose,get_Jks_history
       }
     }
     }
