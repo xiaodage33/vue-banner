@@ -17,8 +17,15 @@ export function get_JenkinsOne(data){
 }
 export function get_JenkinsOneHistory(data){
     return service.request({
-        method:"get",
+        method:"post",
         url:"/__api__/jks/jkshis",
+        data,
+    })
+}
+export function get_Git(data){
+    return service.request({
+        method:"post",
+        url:"/__api__/jks/getgit",
         data,
     })
 }
