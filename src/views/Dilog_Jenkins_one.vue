@@ -89,7 +89,7 @@
       const openDialog = () => {  //弹开后立即执行查日志
         wait_his.value = true
         data.jenkinshistory = []
-        get_JenkinsOne_info()
+        get_JenkinsOne_info()  //查单独dialog的
         //需要触发历史版本
         get_Jks_history()
       }
