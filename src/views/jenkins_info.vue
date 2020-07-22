@@ -1,20 +1,30 @@
 <template>
     <div>
-       <div class="pull-left" style="margin-left: 20px;font-size: 30px"> jenkins打包查询系统   </div>
+      <div class="pull-left" style="margin-left: 20px;font-size: 30px"> jenkins打包查询系统</div>
       <div>
-    <el-input v-model="data.username" class="pull-left" style="margin-left: 30px;width: 600px" id="username" placeholder="输入查找的jenkins项目 关键字" type="mini"></el-input>
-    <el-button class="pull-left" @click="get_Jenkins" type="primary" style="margin-left: 20px" :loading="wait_his"> 查找jenkins 项目 </el-button>
+        <el-input v-model="data.username" class="pull-left" style="margin-left: 30px;width: 600px" id="username"
+                  placeholder="输入查找的jenkins项目 关键字" type="mini"></el-input>
+        <el-button class="pull-left" @click="get_Jenkins" type="primary" style="margin-left: 20px" :loading="wait_his">
+          查找jenkins 项目
+        </el-button>
               <div>
-              <el-badge
+                <el-badge
                   :class=""
-                   class="pull-left"
+                  :value="pro_num"
+                  class="pull-left"
                   type="primary"
-                    style="margin-left:10px;">
-            <el-button size="small" @click="new_jks_page" :loading="anniuwait_1" style="font-size: 13px;margin-left: 20px" >有新打包完成任务</el-button>
-                <div v-for="(item,index) in data.new_jks" :key="index" > {{ item.pro_name}}:{{ item.pro_version}}  </div>
-        </el-badge>
+                  style="margin-left:10px;">
+                  <el-button size="small" @click="new_jks_page" :loading="anniuwait_1"
+                             style="font-size: 13px;margin-left: 20px;color: red;">有新打包完成任务
+                  </el-button>
+                  <div v-for="(item,index) in data.new_jks" :key="index">
+                    <el-button type="danger" plain size="mini" @click=Cat_Log(item.id,item.pro_version)
+                               slot="reference" style="font-size: 13px;" >{{ item.pro_name}}:{{ item.pro_version}}
+                    </el-button>
+                  </div>
+                </el-badge>
 
-      </div>
+              </div>
             <el-table
             :data="data.currentItems"
              style="width: 100%;border: 5px;"
@@ -66,7 +76,7 @@
 </template>
 <script>
   import {reactive, ref, isRef, toRefs, onMounted,watch,onBeforeMount} from '@vue/composition-api';
-  import {get_JenkinsAll,get_Newjks } from '../../api/getinfo.js'
+  import {get_JenkinsAll,get_Newjks,get_Newbuild } from '../../api/getinfo.js'
   import Dilog_Jenkins_one from "./Dilog_Jenkins_one.vue"
   export default {
     name: 'jenkins_info',
@@ -77,17 +87,15 @@
                 default: false
             }
             },
-
     setup (props, { root, }) {
-
       onBeforeMount(()=>{
           timer.value = setInterval(()=>{
               timer.value ++;
               new_jks_page()
               console.log(timer.value)
-          },20000);
+          },5000);
       })
-
+      const pro_num = ref('')
       const timer = ref(null);
       const dialog_info_add = ref(false)  //弹框传值
       const infoPod = ref('')
@@ -166,14 +174,38 @@
              return
            }
            data.new_jks = response.data.data
+           pro_num.value = data.new_jks.length
            console.log("有任务",data.new_jks)
            anniuwait_1.value = false
         })
       }
 
+      const Cat_Log=(info_id,info)=>{
+        console.log(info_id,info)
+            let data ={"mysql_id":info_id,"pro_version":info}
+            root.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            }).then(() => {
+                console.log("点击确定了",data)
+                get_Newbuild(data).then(response=>{
+                console.log("前端删除返回response",response)
+            },
+            root.$message({
+                type: 'success',
+                message: 'build成功!'
+              })  )
+            }).catch(() => {
+              console.log("点击取消了")
+              root.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
 
 
-
+      }
       return {
         get_Jenkins,
         data,
@@ -182,7 +214,7 @@
         Cat_Jenkins_one,
         paginationPageSizes,
         page,total,
-        handleSizeChange,handleCurrentChange,wait_his,new_jks_page,anniuwait_1,timer
+        handleSizeChange,handleCurrentChange,wait_his,new_jks_page,anniuwait_1,timer,Cat_Log,pro_num,
       }
     }
   }

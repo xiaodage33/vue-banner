@@ -37,6 +37,15 @@ export function get_Newjks(data){
         data,
     })
 }
+
+export function get_Newbuild(data){
+    return service.request({
+        method:"post",
+        url:"/__api__/jks/newbuild",
+        data,
+    })
+}
+
 // //添加一条数据
 // export function addinfo(data){
 //     return service.request({
