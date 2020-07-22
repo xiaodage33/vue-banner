@@ -29,6 +29,14 @@ export function get_Git(data){
         data,
     })
 }
+
+export function get_Newjks(data){
+    return service.request({
+        method:"get",
+        url:"/__api__/jks/newpro",
+        data,
+    })
+}
 // //添加一条数据
 // export function addinfo(data){
 //     return service.request({

@@ -5,7 +5,7 @@ const BASEURL = process.env.NODE_ENV === 'production' ? '' : '';
 const service = axios.create({
     // baseURL:'http://127.0.0.1:9999/vv/',
     baseURL:BASEURL,
-    timeout:20000,
+    timeout:30000,
 });
 /**
  * 请求接口前，做一些数据处理（请求拦截器）
