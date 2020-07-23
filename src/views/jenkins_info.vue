@@ -1,30 +1,32 @@
 <template>
-    <div>
+    <div >
       <div class="pull-left" style="margin-left: 20px;font-size: 30px"> jenkins打包查询系统</div>
-      <div>
+      <div  >
         <el-input v-model="data.username" class="pull-left" style="margin-left: 30px;width: 600px" id="username"
                   placeholder="输入查找的jenkins项目 关键字" type="mini"></el-input>
         <el-button class="pull-left" @click="get_Jenkins" type="primary" style="margin-left: 20px" :loading="wait_his">
           查找jenkins 项目
         </el-button>
-              <div>
-                <el-badge
-                  :class=""
-                  :value="pro_num"
-                  class="pull-left"
-                  type="primary"
-                  style="margin-left:10px;">
-                  <el-button size="small" @click="new_jks_page" :loading="anniuwait_1"
-                             style="font-size: 13px;margin-left: 20px;color: red;">有新打包完成任务
-                  </el-button>
-                  <div v-for="(item,index) in data.new_jks" :key="index">
-                    <el-button type="danger" plain size="mini" @click=Cat_Log(item.id,item.pro_version)
-                               slot="reference" style="font-size: 13px;" >{{ item.pro_name}}:{{ item.pro_version}}
-                    </el-button>
-                  </div>
-                </el-badge>
+        <div>
+          <el-badge
+            :class=""
+            :value="pro_num"
+            class="pull-left"
+            type="primary"
+            style="margin-left:10px;">
 
-              </div>
+            <el-button class="pull-left" @click="new_jks_page" type="primary" style="margin-left: 20px"
+                       :loading="anniuwait_1"> New Build
+            </el-button>
+          </el-badge>
+          <span v-for="(item,index) in data.new_jks" :key="index">
+                    <el-button type="danger" plain size="mini" @click=Cat_Log(item.id,item.pro_version)
+                               slot="reference" style="font-size: 10px;margin-left: 3px;white-space: nowrap;"
+                    >{{ item.pro_name}}:{{ item.pro_version}}
+                    </el-button>
+                  </span>
+
+        </div>
             <el-table
             :data="data.currentItems"
              style="width: 100%;border: 5px;"
@@ -51,7 +53,7 @@
                       title="你还没有权限？">
                         <el-button type="danger" size="mini" @click='del_message(scope.row.id)' slot="reference" >删除</el-button>
                         <el-button type="success" size="mini"  @click='editInfo(scope.row.id)' slot="reference" :loading="true">编辑</el-button>
-                        <el-button type="success" size="mini" :title="infoPod"  @click=Cat_Jenkins_one(scope.row.data_name) slot="reference" >查看日志</el-button>
+                        <el-button type="success" size="mini" :title="infoPod"  @click=Cat_Jenkins_one(scope.row.data_name) slot="reference" >查看详情</el-button>
                          <!--scope.row.pod 可以这么传pod名字-->
                     </el-popconfirm>
                 </template>
@@ -92,7 +94,7 @@
           timer.value = setInterval(()=>{
               timer.value ++;
               new_jks_page()
-              console.log(timer.value)
+              // console.log(timer.value)
           },5000);
       })
       const pro_num = ref('')
@@ -183,14 +185,15 @@
       const Cat_Log=(info_id,info)=>{
         console.log(info_id,info)
             let data ={"mysql_id":info_id,"pro_version":info}
-            root.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+            root.$confirm('此操作将更新集群项目, 确定要继续吗?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning',
             }).then(() => {
-                console.log("点击确定了",data)
                 get_Newbuild(data).then(response=>{
-                console.log("前端删除返回response",response)
+                alert(111)
+
+
             },
             root.$message({
                 type: 'success',

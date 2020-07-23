@@ -35,8 +35,8 @@
 
         </div>
         <div slot="footer" class="dialog-footer " style="margin: 20px">
-          <el-button type="primary" @click="dialogFormVisible1 = false" style="width:80px">取 消</el-button>
-          <el-button type="primary" @click="goujian" style="width:80px">确 定</el-button>
+          <!--<el-button type="primary" @click="dialogFormVisible1 = false" style="width:80px">取 消</el-button>-->
+          <!--<el-button type="primary" @click="goujian" style="width:80px">确 定</el-button>-->
 
         </div>
       </el-dialog>
