@@ -20,7 +20,7 @@
             </el-button>
           </el-badge>
           <span v-for="(item,index) in data.new_jks" :key="index">
-                    <el-button type="danger" plain size="mini" @click=Cat_Log(item.id,item.pro_version)
+                    <el-button type="danger" plain size="mini" @click=Send_Build(item.id,item.pro_name,item.pro_version)
                                slot="reference" style="font-size: 10px;margin-left: 3px;white-space: nowrap;"
                     >{{ item.pro_name}}:{{ item.pro_version}}
                     </el-button>
@@ -90,13 +90,14 @@
             }
             },
     setup (props, { root, }) {
-      onBeforeMount(()=>{
-          timer.value = setInterval(()=>{
-              timer.value ++;
-              new_jks_page()
-              // console.log(timer.value)
-          },5000);
-      })
+      //定时任务
+      // onBeforeMount(()=>{
+      //     timer.value = setInterval(()=>{
+      //         timer.value ++;
+      //         new_jks_page()
+      //         // console.log(timer.value)
+      //     },5000);
+      // })
       const pro_num = ref('')
       const timer = ref(null);
       const dialog_info_add = ref(false)  //弹框传值
@@ -182,19 +183,23 @@
         })
       }
 
-      const Cat_Log=(info_id,info)=>{
+      const Send_Build=(info_id,pro_name,info)=>{
         console.log(info_id,info)
-            let data ={"mysql_id":info_id,"pro_version":info}
+            let data ={"mysql_id":info_id,"pro_name":pro_name,"pro_version":info}
             root.$confirm('此操作将更新集群项目, 确定要继续吗?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning',
             }).then(() => {
-                get_Newbuild(data).then(response=>{
-                alert(111)
+                get_Newbuild(data).then(response =>{
+                  let get_data = response.data
+                  console.log("来吧===》",get_data.data)
+                  alert(get_data.data)
+                  if(get_data.data != 'ok'){
 
-
+            }
             },
+
             root.$message({
                 type: 'success',
                 message: 'build成功!'
@@ -206,8 +211,6 @@
                 message: '已取消删除'
               });
             });
-
-
       }
       return {
         get_Jenkins,
@@ -217,16 +220,11 @@
         Cat_Jenkins_one,
         paginationPageSizes,
         page,total,
-        handleSizeChange,handleCurrentChange,wait_his,new_jks_page,anniuwait_1,timer,Cat_Log,pro_num,
+        handleSizeChange,handleCurrentChange,wait_his,new_jks_page,anniuwait_1,timer,Send_Build,pro_num,
       }
     }
   }
 </script>
-
 <style scoped>
-
-
-
-
 
 </style>
