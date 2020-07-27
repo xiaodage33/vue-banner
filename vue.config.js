@@ -28,7 +28,11 @@ module.exports = {
       proxy: {
           '/__api__': {
               //测试集群环境
-              target: "http://auto-jenkins-vue", //API服务器的地址  http://www.web-jshtml.cn/api
+              target: "http://auto-jenkins-djnago", //API服务器的地址  http://www.web-jshtml.cn/api
+
+               //本地到集群连接方式
+              // target: "http://scf-auto-jenkins-djnago", //API服务器的地址  http://www.web-jshtml.cn/api
+
               //本地环境
               // target: "http://192.168.9.240:8989", //API服务器的地址  http://www.web-jshtml.cn/api
 
