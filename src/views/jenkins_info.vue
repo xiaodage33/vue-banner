@@ -23,9 +23,9 @@
                     <el-button type="danger" plain size="mini" @click=Send_Build(item.id,item.pro_name,item.pro_version)
                                slot="reference" style="font-size: 10px;margin-left: 3px;white-space: nowrap;"
                     >{{ item.pro_name}}:{{ item.pro_version}}
+
                     </el-button>
                   </span>
-
         </div>
             <el-table
             :data="data.currentItems"
@@ -78,7 +78,7 @@
 </template>
 <script>
   import {reactive, ref, isRef, toRefs, onMounted,watch,onBeforeMount} from '@vue/composition-api';
-  import {get_JenkinsAll,get_Newjks,get_Newbuild } from '../../api/getinfo.js'
+  import {get_JenkinsAll,get_Newjks,get_Newbuild,get_Yincang } from '../../api/getinfo.js'
   import Dilog_Jenkins_one from "./Dilog_Jenkins_one.vue"
   export default {
     name: 'jenkins_info',
@@ -168,7 +168,7 @@
         anniuwait_1.value = true
         get_Newjks().then(response =>{
            let info = response.data
-           if(response.data.data.code == 999){
+           if(response.data.data.code === 999 || response.data.data === "null" ){
              root.$message({
                message: "没有更新任务！！！",
                type:"success"
@@ -186,24 +186,42 @@
       const Send_Build=(info_id,pro_name,info)=>{
         console.log(info_id,info)
             let data ={"mysql_id":info_id,"pro_name":pro_name,"pro_version":info}
-            root.$confirm('此操作将更新集群项目, 确定要继续吗?', '提示', {
+            root.$confirm('确定要操作此项目吗?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning',
             }).then(() => {
-                get_Newbuild(data).then(response =>{
-                  let get_data = response.data
-                  console.log("来吧===》",get_data.data)
-                  alert(get_data.data)
-                  if(get_data.data != 'ok'){
+                  root.$confirm("此版本号隐藏还是构建",{
+                    confirmButtonText: '确定构建',
+                    cancelButtonText: '隐藏略过',
+                    type: 'warning',
+                  }).then(()=>{
+                    get_Newbuild(data).then(response =>{
+                      let get_data = response.data
+                      console.log('构建传值===》', get_data.data)
+                      console.log('隐藏的funtion')
+                        if(get_data.data === 'ok'){
+                      root.$message({
+                        message: "构建成功",
+                        type: "success"
+                      })
+                    }
+                    else{
+                        root.$message({
+                        message: "构建失败:"+get_data.data,
 
-            }
-            },
+                        type: "warning"
+                      })
+                  }
+                  }).catch(()=>{
+                    })
+                  }).catch(() => {
+                    get_Yincang(data).then(response => {
+                      console.log('隐藏传值===》', get_data.data)
 
-            root.$message({
-                type: 'success',
-                message: 'build成功!'
-              })  )
+                    })
+                    console.log('点击取消')
+                  })
             }).catch(() => {
               console.log("点击取消了")
               root.$message({

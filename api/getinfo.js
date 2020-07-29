@@ -46,6 +46,14 @@ export function get_Newbuild(data){
     })
 }
 
+
+export function get_Yincang(data){
+    return service.request({
+        method:"post",
+        url:"/__api__/jks/conceal",
+        data,
+    })
+}
 // //添加一条数据
 // export function addinfo(data){
 //     return service.request({
