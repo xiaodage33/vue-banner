@@ -9,27 +9,37 @@
         <div>
           <el-form :model="data.form" size="small">
             <el-form-item class="pull-left" label="项目名字" :label-width="formLabelWidth">
-              <el-input class="pull-left" style="width: 300px" v-model="data.form.project_name"
+              <el-input class="pull-left" style="width: 200px" v-model="data.form.project_name"
                         autocomplete="off"></el-input>
               <span style="margin-left:20px; color: red"> 最后构建版本号：{{ data.form.version}}  </span>
             </el-form-item>
 
             <el-form-item class="pull-left" label="历史版本" :label-width="formLabelWidth"><span
               style="font-size: 4px;color: red;margin-left: 10px"> *要清空后选择版本构建  </span>
-              <el-select style="padding-left: 10px;"  class="pull-left" v-model="data.select_version" clearable
+              <el-select style="padding-left: 10px;" class="pull-left" v-model="data.select_version" clearable
                          placeholder="请选择版本号" size="mini">
                 <el-option
                   v-for="(item,index) in data.jenkinshistory" :key="index"
                   :value="item.version || '无' ">
                 </el-option>
               </el-select>
-                       <el-button type="primary" :plain="true" :loading="wait_his" @click="get_Jks_history(data.form.project_name)" style="font-size: 10px">
-            显示历史版本
-          </el-button>
-          <el-button type="primary" :plain="true" @click="cat_git()" :loading="wait_his"  style="width:120px;font-size: 10px">当前版本git变化</el-button>
+              <el-button type="primary" :plain="true" :loading="wait_his"
+                         @click="get_Jks_history(data.form.project_name)" style="font-size: 10px">
+                显示历史版本
+              </el-button>
+              <el-button type="primary" :plain="true" @click="cat_git()" :loading="wait_his"
+                         style="width:120px;font-size: 10px">当前版本git变化
+              </el-button>
+              <el-button type="primary" :plain="true" @click="his_build(data.form.project_name)" :loading="wait_his" class="pull-left"
+                         style="width:120px;font-size: 10px">恢复历史版本
+              </el-button>
+
             </el-form-item>
+
           </el-form>
+
         </div>
+
           <br/>  <br/>  <br/>  <br/>
         <div>
 
@@ -46,7 +56,7 @@
 <script>
   import { reactive, ref, watch, toRefs } from '@vue/composition-api'
   import { get_JenkinsOne } from '../../api/getinfo.js'
-  import { get_JenkinsOneHistory,get_Git } from '../../api/getinfo.js'
+  import { get_JenkinsOneHistory,get_Git,get_Newbuild } from '../../api/getinfo.js'
 
   export default {
     name: 'Dilog_ShowLog_one',
@@ -168,6 +178,30 @@
         }).catch(error => {
         })
       }
+
+      const his_build=(name)=>{
+
+        let responsedata = {
+          "mysql_id":"null",
+          'pro_name': name,
+          'pro_version': data.select_version
+        }
+        console.log("要传出的值",responsedata)
+        get_Newbuild(responsedata).then(response => {
+          let get_data = response.data
+          console.log('构建传值===》', get_data.data)
+          alert(get_data.data)
+          console.log('隐藏的funtion')
+          if (get_data.data === 'ok') {
+            root.$message({
+              message: '构建成功',
+              type: 'success'
+            })
+          }
+        })
+
+      }
+
       return {
         data,
         openDialog,
@@ -178,7 +212,7 @@
         form,
         formLabelWidth,
         close,
-        wait_his,cat_git
+        wait_his,cat_git,his_build
       }
     }
   }

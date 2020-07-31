@@ -15,13 +15,11 @@
             type="primary"
             style="margin-left:10px;">
 
-            <el-button class="pull-left" @click="new_jks_page" type="primary" style="margin-left: 20px"
-                       :loading="anniuwait_1"> New Build
-            </el-button>
+            <el-button class="pull-left" @click="new_jks_page" type="primary" style="margin-left: 20px" :loading="anniuwait_1"> New Build </el-button>
           </el-badge>
           <span v-for="(item,index) in data.new_jks" :key="index">
                     <el-button type="danger" plain size="mini" @click=Send_Build(item.id,item.pro_name,item.pro_version)
-                               slot="reference" style="font-size: 10px;margin-left: 3px;white-space: nowrap;"
+                               slot="reference" style="font-size: 10px;margin-left: 3px;white-space: nowrap;"  :loading="wait_his"
                     >{{ item.pro_name}}:{{ item.pro_version}}
 
                     </el-button>
@@ -146,6 +144,8 @@
            // let data_name = stripscript(data.username)  //引入过滤特殊字符
            tempItems = item.filter(i=>i.data_name.indexOf(data.username)>-1);
         }
+
+
         total.value = tempItems.length;
         const {pageSize = paginationPageSizes[0], pageNumber = 1} = page; //显示条数和 当前页码
         const startIndex = (pageNumber - 1) * pageSize;
@@ -157,6 +157,11 @@
           }
         }
         data.currentItems = currentItem
+        // console.log(data.currentItems[2])
+        // for(let i=0;i<=data.currentItems;i++){
+        //   console.log("aaa")
+        //   console.log("haha==>",data.currentItems[i].value)
+        // }
       }
 
       const Cat_Jenkins_one = (pod) => {
@@ -174,11 +179,12 @@
                type:"success"
              })
              anniuwait_1.value = false
+             pro_num.value = 0
+             data.new_jks = ''
              return
            }
            data.new_jks = response.data.data
            pro_num.value = data.new_jks.length
-           console.log("有任务",data.new_jks)
            anniuwait_1.value = false
         })
       }
@@ -205,6 +211,7 @@
                         message: "构建成功",
                         type: "success"
                       })
+                      new_jks_page()
                     }
                     else{
                         root.$message({
@@ -212,15 +219,15 @@
 
                         type: "warning"
                       })
+                     new_jks_page()
                   }
                   }).catch(()=>{
                     })
                   }).catch(() => {
                     get_Yincang(data).then(response => {
-                      console.log('隐藏传值===》', get_data.data)
 
+                      new_jks_page()
                     })
-                    console.log('点击取消')
                   })
             }).catch(() => {
               console.log("点击取消了")
